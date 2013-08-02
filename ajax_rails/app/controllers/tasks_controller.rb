@@ -27,13 +27,20 @@ end
 def complete
 	@task = Task.find(params[:id])
 	@task.update_attribute(:completed, true)
+	@task.save
+		respond_to do |format|
+			format.js
+		end
+
+end
+
+def destroy
+	@task = Task.find(params[:id])
+		@task.destroy
 
 		respond_to do |format|
 			format.js
 		end
-end
-
-def destroy
 end
 
 	# STEP 8: Make the index action respond to json requests with json containing the array from `Task.all`

@@ -50,6 +50,7 @@ Since the last two events require DOM manipulation but don't return any data we 
 27. Find the `complete.js.erb` file in the Task view that will hold the javascript response.
 28. Use the HTML `data-id` attribute to find the task in the DOM.
 29. Move the task to the `completed-items` list.
+
 30. Make the step 15 `deleteButton.click()` make an ajax call to the `TasksController#destroy` action and set the `dataType` setting to `script`
 31. In the `TasksController#destroy` action, find the task by id and delete that task from the database .
 32. In the `TasksController#destroy` action, make `respond_to` respond to a javascript request .
