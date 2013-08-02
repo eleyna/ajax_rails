@@ -8,10 +8,10 @@
 //= require jquery_ujs
 //= require_tree .
 
-// STEP 11: Make a function that takes a task JavaScript object as an argument
+// STEP 11: Note this function that takes a task JavaScript object as an argument
 // This function will generate a DOM version of the task javasctipt object it takes as an argument
 var appendTask = function(task){
-	// Created local variables that hold the jQuery selectors for: 
+	// Created local variables that hold the jQuery selectors for:
 	//     completeButton, deleteButton, actions, taskText, htmlTask
 	// Note the classes on these
 	var completeButton = $('<button class="complete">complete</button>');
@@ -30,25 +30,29 @@ var appendTask = function(task){
 	// Handles the click event on the complete button using Ajax
 	completeButton.click(function(){
 		$.ajax({
+			url: '/tasks/complete' + task.id,
+			dataType: 'script',
+			type: 'PUT'
 			// STEP 24: Make the step 15 `.click()` make an ajax call to the `complete` action and set the `dataType` setting to `script`
-		)}
+		})
 	});
 
 	// Handles the click event on the delete button using Ajax
 	deleteButton.click(function(){
 		$.ajax({
 			// Step 30: Make the step 15 `deleteButton.click()` make an ajax call to the `TasksController#destroy` action and set the `dataType` setting to `script`
-		)}
+		})
 	});
 
-	// STEP 13: Set the htmlTask elements `data-id` attribute to the tasks id 
+	// STEP 13: Set the htmlTask elements `data-id` attribute to the tasks id
 	// to make them easy to find for the DOM manipulating ajax response functions
 	// Do this just below here:
-
+	htmlTask.attr("data-id", task.id);
 
 	// STEP 14: Append htmlTask either to the `#todo-items` list or the `#completed-items` list
 	// but don't allow empty tasks
-}
+	$('#todo-items').append(htmlTask);
+};
 
 // This runs when the window is loaded
 // Similar to window.onload, but for jQuery
@@ -57,27 +61,38 @@ $(function(){
 	// STEP 9: When the DOM is ready make an ajax call to the index action with a `dataType` setting of 'json'
 	// Send an AJAX json request to the index action to get all the tasks
 	$.ajax({
+		url: '/',
+		dataType: 'json',
+		type: 'GET'
 	}).done(function(data){ //handle the json response
 			// STEP 10: For now use `console.log` in `.done()` to see the result is an array of javascript objects.
+
 			// STEP 16: Rewrite the `.done()` method in step 10 so that it loops through the elements in the ajax response object and passes each to the new append task function
+		var length = data.length;
+		for (var i = 0; i < length; i++) {
+			appendTask(data[i]);
+		}
 	});
 
 	// Add a click event handler to the add item button
 	$('#add-item').click(function(){
+		var task = { name: $('#new-task-field').val() };
 		// STEP 17: Make a javascript JSON object `task` that will have a `name` attribute
 		// We'll use this object to send data to the server
-		// STEP 18: Set the name attribute to the value of the text in the `input` field 
+		// STEP 18: Set the name attribute to the value of the text in the `input` field
 
 		// Don't save tasks with no name
 		if (task.name.length!==0){
 			$.ajax({
+				url: '/create/' + task.name,
+        dataType: 'json',
+        type: 'POST'
 				// STEP 19: Make this click event send a json object to the `create` action using AJAX
 			}).done(function(data){ // Handle the json response
-				// STEP 20: Use the method `console.log` on the result to see that it will return a JavaScript task object after the next steps. 
+				appendTask(task);
+				// STEP 20: Use the method `console.log` on the result to see that it will return a JavaScript task object after the next steps.
 				// STEP 23: Rewrite `.done()` method from step 20 to send the response object to the append task function
 			});
 		}
 	});
 });
-
-

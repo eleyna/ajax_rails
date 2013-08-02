@@ -7,3 +7,11 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # STEP 6: Create basic seed data for a 5 tasks here
+
+Task.delete_all
+
+t1 = Task.create(name: "Laundry")
+t2 = Task.create(name: "Dishes")
+t3 = Task.create(name: "Groceries")
+t4 = Task.create(name: "Dry cleaning")
+t5 = Task.create(name: "Fun!")
